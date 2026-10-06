@@ -20,7 +20,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
   if (query) {
     const contains = { contains: query }
-    const [guides, jobs, vehicles, items, places, laws, members, cases] = await Promise.all([
+    const [guides, jobs, vehicles, items, places, laws, cases] = await Promise.all([
       payload.find({
         collection: 'guides',
         where: { or: [{ title: contains }, { summary: contains }] },
@@ -49,11 +49,6 @@ export default async function SearchPage({ searchParams }: Props) {
       payload.find({
         collection: 'laws',
         where: { or: [{ title: contains }, { summary: contains }] },
-        limit: 10,
-      }),
-      payload.find({
-        collection: 'family-members',
-        where: { or: [{ name: contains }, { summary: contains }] },
         limit: 10,
       }),
       payload.find({
@@ -99,12 +94,6 @@ export default async function SearchPage({ searchParams }: Props) {
         title: doc.title,
         summary: doc.summary,
         kind: 'Правило',
-      })),
-      ...members.docs.map((doc) => ({
-        href: `/family/${doc.slug}`,
-        title: doc.name,
-        summary: doc.summary,
-        kind: 'Семья',
       })),
       ...cases.docs.map((doc) => ({
         href: `/cases/${doc.slug}`,

@@ -76,7 +76,6 @@ export interface Config {
     cases: Case;
     guides: Guide;
     laws: Law;
-    'family-members': FamilyMember;
     updates: Update;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
@@ -94,7 +93,6 @@ export interface Config {
     cases: CasesSelect<false> | CasesSelect<true>;
     guides: GuidesSelect<false> | GuidesSelect<true>;
     laws: LawsSelect<false> | LawsSelect<true>;
-    'family-members': FamilyMembersSelect<false> | FamilyMembersSelect<true>;
     updates: UpdatesSelect<false> | UpdatesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -207,10 +205,18 @@ export interface Job {
   id: number;
   title: string;
   slug: string;
+  tagline?: string | null;
   summary?: string | null;
   body?: string | null;
+  employmentType?: ('civilian' | 'state' | 'freelance' | 'criminal') | null;
+  legality?: ('legal' | 'semilegal' | 'illegal') | null;
+  incomeMin?: number | null;
+  incomeMax?: number | null;
+  incomeNote?: string | null;
   incomePerHour?: string | null;
   requiredLevel?: number | null;
+  needsTransport?: boolean | null;
+  difficulty?: ('easy' | 'medium' | 'hard') | null;
   legal?: boolean | null;
   farmTip?: string | null;
   updatedAt: string;
@@ -297,22 +303,6 @@ export interface Law {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "family-members".
- */
-export interface FamilyMember {
-  id: number;
-  name: string;
-  slug: string;
-  role?: string | null;
-  summary?: string | null;
-  body?: string | null;
-  status?: ('active' | 'recruiting' | 'idle') | null;
-  specialty?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "updates".
  */
 export interface Update {
@@ -385,10 +375,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'laws';
         value: number | Law;
-      } | null)
-    | ({
-        relationTo: 'family-members';
-        value: number | FamilyMember;
       } | null)
     | ({
         relationTo: 'updates';
@@ -502,10 +488,18 @@ export interface VehiclesSelect<T extends boolean = true> {
 export interface JobsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  tagline?: T;
   summary?: T;
   body?: T;
+  employmentType?: T;
+  legality?: T;
+  incomeMin?: T;
+  incomeMax?: T;
+  incomeNote?: T;
   incomePerHour?: T;
   requiredLevel?: T;
+  needsTransport?: T;
+  difficulty?: T;
   legal?: T;
   farmTip?: T;
   updatedAt?: T;
@@ -582,21 +576,6 @@ export interface LawsSelect<T extends boolean = true> {
   body?: T;
   kind?: T;
   server?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "family-members_select".
- */
-export interface FamilyMembersSelect<T extends boolean = true> {
-  name?: T;
-  slug?: T;
-  role?: T;
-  summary?: T;
-  body?: T;
-  status?: T;
-  specialty?: T;
   updatedAt?: T;
   createdAt?: T;
 }

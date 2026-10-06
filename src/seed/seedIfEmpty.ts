@@ -1,5 +1,7 @@
 import type { Payload } from 'payload'
 
+import { jobsSeed } from './jobs'
+
 export async function seedIfEmpty(payload: Payload) {
   const existing = await payload.find({
     collection: 'guides',
@@ -8,10 +10,21 @@ export async function seedIfEmpty(payload: Payload) {
   })
 
   if (existing.totalDocs > 0) {
+    const jobs = await payload.find({ collection: 'jobs', limit: 1, depth: 0 })
+    if (jobs.totalDocs < 10) {
+      payload.logger.info('Refreshing jobs catalog seed…')
+      const allJobs = await payload.find({ collection: 'jobs', limit: 200, depth: 0 })
+      for (const job of allJobs.docs) {
+        await payload.delete({ collection: 'jobs', id: job.id })
+      }
+      for (const job of jobsSeed) {
+        await payload.create({ collection: 'jobs', data: job })
+      }
+    }
     return
   }
 
-  payload.logger.info('Seeding stub content for Фурионовы Вики…')
+  payload.logger.info('Seeding stub content for Фурионов Вики…')
 
   await Promise.all([
     payload.create({
@@ -20,7 +33,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'Лада Гранта',
         slug: 'lada-granta',
         summary: 'Стартовый эконом для поездок на смены. Заглушка — цифры уточним.',
-        body: 'Базовый транспорт для новичка-фармлинга. Хватает, чтобы доехать до работы и обратно, пока копите на что-то шустрее.',
+        body: 'Базовый транспорт для новичка. Хватает, чтобы доехать до работы и обратно, пока копите на что-то шустрее.',
         vehicleClass: 'economy',
         price: 85000,
         topSpeed: 145,
@@ -34,7 +47,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'Газель Next',
         slug: 'gazelle-next',
         summary: 'Коммерция под перевозки и дальнобойные маршруты.',
-        body: 'Когда смена требует объёма — фармлинги берут «Газель». Подробные маршруты и расход добавим позже.',
+        body: 'Когда смена требует объёма — берут «Газель». Подробные маршруты и расход добавим позже.',
         vehicleClass: 'commercial',
         price: 420000,
         topSpeed: 130,
@@ -48,7 +61,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'BMW M5',
         slug: 'bmw-m5',
         summary: 'Спорт-седан — цель, а не старт. Заглушка каталога.',
-        body: 'Красиво едет, дорого стоит. В вики семьи отметим, когда машина реально окупается относительно фарма.',
+        body: 'Красиво едет, дорого стоит. В вики отметим, когда машина реально окупается относительно фарма.',
         vehicleClass: 'sport',
         price: 8500000,
         topSpeed: 250,
@@ -56,45 +69,7 @@ export async function seedIfEmpty(payload: Payload) {
         howToGet: 'Автосалон / кейс',
       },
     }),
-    payload.create({
-      collection: 'jobs',
-      data: {
-        title: 'Сбор ягод',
-        slug: 'berry-picking',
-        summary: 'Первая легальная смена. Мало, но стабильно.',
-        body: 'Классика для 1 уровня. Не геройство — разминка перед нормальным фармом.',
-        incomePerHour: '8–12 тыс. ₽',
-        requiredLevel: 1,
-        legal: true,
-        farmTip: 'Берите пока учитесь карте. Как только откроется почта или стройка — переключайтесь.',
-      },
-    }),
-    payload.create({
-      collection: 'jobs',
-      data: {
-        title: 'Дальнобойщик',
-        slug: 'trucker',
-        summary: 'Основной фарм Фурионовых: рейсы, мультипликаторы, дисциплина.',
-        body: 'Долгие рейсы, хороший доход при правильном ритме. Здесь позже будут таблицы маршрутов и бонусов.',
-        incomePerHour: '45–70 тыс. ₽',
-        requiredLevel: 10,
-        legal: true,
-        farmTip: 'Считайте не «рейс», а «час чистого фарма». Премиум и группа — почти всегда плюс.',
-      },
-    }),
-    payload.create({
-      collection: 'jobs',
-      data: {
-        title: 'Таксист',
-        slug: 'taxi',
-        summary: 'Гибкая смена между рейсами.',
-        body: 'Удобно закрывать короткое окно онлайна. Цифры дохода — заглушка, снимем с экрана позже.',
-        incomePerHour: '25–40 тыс. ₽',
-        requiredLevel: 3,
-        legal: true,
-        farmTip: 'Берите пиковые часы. Пустые круги по городу — враг фармлинга.',
-      },
-    }),
+    ...jobsSeed.map((job) => payload.create({ collection: 'jobs', data: job })),
     payload.create({
       collection: 'items',
       data: {
@@ -114,7 +89,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'Канистра бензина',
         slug: 'fuel-can',
         summary: 'Запас на случай пустого бака в глуши.',
-        body: 'Фармлинг без канистры — это пешая прогулка до АЗС.',
+        body: 'Без канистры на длинном рейсе легко остаться пешком до АЗС.',
         category: 'consumable',
         buyPrice: 800,
         sellPrice: 200,
@@ -173,7 +148,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'Как начать играть',
         slug: 'how-to-start',
         summary: 'Majestic ID, Legacy, лаунчер, выбор сервера.',
-        body: '1) Создайте Majestic ID.\n2) Установите GTA V Legacy и один раз запустите.\n3) Поставьте Majestic Launcher и войдите.\n4) Выберите сервер Россия Онлайн.\n\nПодробные скрины добавим. Пока это каркас гайда семьи.',
+        body: '1) Создайте Majestic ID.\n2) Установите GTA V Legacy и один раз запустите.\n3) Поставьте Majestic Launcher и войдите.\n4) Выберите сервер Россия Онлайн.\n\nПодробные скрины добавим. Пока это каркас гайда.',
         level: 'novice',
         readTime: 7,
         featured: true,
@@ -185,7 +160,7 @@ export async function seedIfEmpty(payload: Payload) {
         title: 'Первые деньги',
         slug: 'first-money',
         summary: 'Что фармить в первые часы, чтобы не топтаться на месте.',
-        body: 'Стартовые работы → короткие цели → первая машина под смены.\nФурионовы считают успех не по «красивому скрину», а по стабильному доходу в час.',
+        body: 'Стартовые работы → короткие цели → первая машина под смены.\nСчитайте успех не по «красивому скрину», а по стабильному доходу в час.',
         level: 'novice',
         readTime: 8,
         featured: true,
@@ -194,10 +169,10 @@ export async function seedIfEmpty(payload: Payload) {
     payload.create({
       collection: 'guides',
       data: {
-        title: 'Смена фармлинга',
-        slug: 'farmling-shift',
-        summary: 'Ритм смены: подготовка, рейсы, фиксация результата.',
-        body: 'Перед сменой: бензин, ремонт, маршрут.\nВ смене: минимум простоев.\nПосле: сколько в час чистыми — и что улучшить завтра.\n\nЭто ядро вики Фурионовых — сюда будут реальные цифры с наших сессий.',
+        title: 'Ритм смены',
+        slug: 'farm-shift',
+        summary: 'Подготовка, рейсы, фиксация результата.',
+        body: 'Перед сменой: бензин, ремонт, маршрут.\nВ смене: минимум простоев.\nПосле: сколько в час чистыми — и что улучшить завтра.\n\nСюда позже попадут реальные цифры с сессий.',
         level: 'mid',
         readTime: 10,
         featured: true,
@@ -238,36 +213,12 @@ export async function seedIfEmpty(payload: Payload) {
       },
     }),
     payload.create({
-      collection: 'family-members',
-      data: {
-        name: 'Фурионов (основатель)',
-        slug: 'founder',
-        role: 'Глава семьи',
-        summary: 'Тот, кто задаёт темп фарма и держит вики в порядке.',
-        body: 'Семья Фурионовых — про заработок, дисциплину смен и полезные гайды, которых не хватает на официале.',
-        status: 'active',
-        specialty: 'Планирование фарма',
-      },
-    }),
-    payload.create({
-      collection: 'family-members',
-      data: {
-        name: 'Слот фармлинга',
-        slug: 'open-slot',
-        role: 'Новичок семьи',
-        summary: 'Место открыто: приходи, если готов фармить, а не просто числиться.',
-        body: 'Правила набора и голосовой/дискорд добавим. Пока — заглушка «мы набираем».',
-        status: 'recruiting',
-        specialty: 'Любая легальная смена',
-      },
-    }),
-    payload.create({
       collection: 'updates',
       data: {
-        title: 'Запуск Фурионовы Вики',
+        title: 'Запуск Фурионов Вики',
         slug: 'wiki-launch',
         summary: 'Каркас сайта, админка и заглушки разделов.',
-        body: 'Появились разделы транспорта, работ, гайдов, семьи и остальных каталогов. Контент будем наполнять реальными цифрами со смен.',
+        body: 'Появились разделы транспорта, работ, гайдов и остальных каталогов. Контент будем наполнять реальными цифрами со смен.',
         kind: 'feature',
         publishedAt: '2026-10-02',
       },
@@ -275,9 +226,9 @@ export async function seedIfEmpty(payload: Payload) {
     payload.create({
       collection: 'updates',
       data: {
-        title: 'Сиды фармлингов',
-        slug: 'farmling-stubs',
-        summary: 'Добавлены демо-статьи, чтобы увидеть навигацию.',
+        title: 'Демо-статьи разделов',
+        slug: 'demo-stubs',
+        summary: 'Добавлены заглушки, чтобы увидеть навигацию.',
         body: 'Все тексты помечены как заглушки. Редактируйте их в /admin.',
         kind: 'added',
         publishedAt: '2026-10-02',

@@ -1,0 +1,19 @@
+services:
+  wiki:
+    build: .
+    container_name: furionov-wiki
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: file:./data/furionov-wiki.db
+      NEXT_PUBLIC_SERVER_URL: https://wiki.mysitehub.ru
+    volumes:
+      - wiki-data:/app/data
+      - wiki-media:/app/media
+
+volumes:
+  wiki-data:
+  wiki-media:

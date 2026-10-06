@@ -1,10 +1,9 @@
-import Link from 'next/link'
-
 import { EmptyState, PageHero } from '@/components/Ui'
+import { JobsCatalog } from '@/components/JobsCatalog'
 import { getPayloadClient } from '@/lib/payload'
 
 export const metadata = {
-  title: 'Работа',
+  title: 'Работа и профессии',
 }
 
 export default async function JobsPage() {
@@ -18,27 +17,31 @@ export default async function JobsPage() {
   return (
     <>
       <PageHero
-        eyebrow="Фарм"
+        eyebrow="Каталог"
         title="Работа и профессии"
-        description="Доход в час, уровень открытия и советы фармлингов. Цифры пока ориентировочные."
+        description="Доход за смену, тип занятости, законность и уровень открытия. Цифры — с экрана работ и официальных списков; часть пока заглушки."
       />
       <section className="section-block" style={{ paddingTop: 0 }}>
         <div className="shell">
           {jobs.docs.length ? (
-            <div className="card-grid">
-              {jobs.docs.map((job) => (
-                <Link key={job.id} href={`/jobs/${job.slug}`} className="content-card">
-                  <p className="card-kicker">
-                    {job.legal === false ? 'Серая зона' : 'Легально'} · ур. {job.requiredLevel ?? '—'}
-                  </p>
-                  <h2>{job.title}</h2>
-                  <p>{job.summary}</p>
-                  <div className="card-stats">
-                    <span>{job.incomePerHour || 'доход скоро'}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
+            <JobsCatalog
+              jobs={jobs.docs.map((job) => ({
+                id: job.id,
+                title: job.title,
+                slug: job.slug,
+                tagline: job.tagline,
+                summary: job.summary,
+                employmentType: job.employmentType,
+                legality: job.legality,
+                incomeMin: job.incomeMin,
+                incomeMax: job.incomeMax,
+                incomeNote: job.incomeNote,
+                incomePerHour: job.incomePerHour,
+                requiredLevel: job.requiredLevel,
+                needsTransport: job.needsTransport,
+                difficulty: job.difficulty,
+              }))}
+            />
           ) : (
             <EmptyState title="Пока пусто" hint="Добавьте работы в админке." />
           )}

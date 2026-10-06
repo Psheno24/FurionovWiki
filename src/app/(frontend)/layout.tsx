@@ -1,19 +1,19 @@
 import React from 'react'
-import { Manrope, Unbounded } from 'next/font/google'
+import { JetBrains_Mono, Onest } from 'next/font/google'
 
 import { SiteFooter, SiteHeader } from '@/components/SiteChrome'
 import { site } from '@/lib/site'
 
 import './styles.css'
 
-const display = Unbounded({
+const sans = Onest({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-display-next',
+  variable: '--font-sans',
 })
 
-const body = Manrope({
+const mono = JetBrains_Mono({
   subsets: ['latin', 'cyrillic'],
-  variable: '--font-body-next',
+  variable: '--font-mono',
 })
 
 export const metadata = {
@@ -26,7 +26,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${display.variable} ${body.variable}`}>
+    <html lang="ru" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <SiteHeader />
         <main>{children}</main>

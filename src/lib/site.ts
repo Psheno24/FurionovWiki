@@ -1,9 +1,11 @@
 export const site = {
-  name: 'Фурионовы Вики',
-  shortName: 'ФУРИОНОВЫ',
-  tagline: 'База фармлингов',
+  name: 'Фурионов Вики',
+  shortName: 'Фурионов Вики',
+  tagline: 'Вики по фарму',
   description:
-    'Неофициальная вики семьи Фурионовых по Россия Онлайн: гайды по фарму, транспорт, работы и то, чего не хватает на официале.',
+    'Неофициальная вики по Россия Онлайн: гайды по фарму, транспорт, работы и то, чего не хватает на официале.',
+  /** Цвет фамки */
+  color: '#78875B',
 }
 
 export const navLinks = [
@@ -14,7 +16,6 @@ export const navLinks = [
   { href: '/places', label: 'Места' },
   { href: '/cases', label: 'Кейсы' },
   { href: '/laws', label: 'Правила' },
-  { href: '/family', label: 'Семья' },
   { href: '/updates', label: 'Обновления' },
 ] as const
 
@@ -27,7 +28,7 @@ export const sectionMeta = [
   {
     href: '/jobs',
     title: 'Работа',
-    description: 'Доход в час, уровень и советы фармлингов по сменам.',
+    description: 'Доход в час, уровень и советы по сменам.',
   },
   {
     href: '/items',
@@ -53,11 +54,6 @@ export const sectionMeta = [
     href: '/laws',
     title: 'Правила и законы',
     description: 'Короткие памятки сейчас, полные тексты — по мере наполнения.',
-  },
-  {
-    href: '/family',
-    title: 'Семья Фурионовых',
-    description: 'Кто мы, кого набираем и чем живёт клан фармлингов.',
   },
 ] as const
 

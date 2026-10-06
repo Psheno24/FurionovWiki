@@ -48,7 +48,7 @@ export const Jobs: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'incomePerHour', 'requiredLevel', 'updatedAt'],
+    defaultColumns: ['title', 'employmentType', 'legality', 'requiredLevel', 'updatedAt'],
   },
   access: {
     read: () => true,
@@ -56,12 +56,51 @@ export const Jobs: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true, label: 'Название' },
     slugField(),
+    { name: 'tagline', type: 'text', label: 'Подзаголовок' },
     { name: 'summary', type: 'textarea', label: 'Кратко' },
     { name: 'body', type: 'textarea', label: 'Описание' },
-    { name: 'incomePerHour', type: 'text', label: 'Доход в час' },
+    {
+      name: 'employmentType',
+      type: 'select',
+      label: 'Тип занятости',
+      options: [
+        { label: 'Гражданская', value: 'civilian' },
+        { label: 'Государственная', value: 'state' },
+        { label: 'Фриланс', value: 'freelance' },
+        { label: 'Криминальная', value: 'criminal' },
+      ],
+      defaultValue: 'civilian',
+    },
+    {
+      name: 'legality',
+      type: 'select',
+      label: 'Законность',
+      options: [
+        { label: 'Легально', value: 'legal' },
+        { label: 'Полулегально', value: 'semilegal' },
+        { label: 'Нелегально', value: 'illegal' },
+      ],
+      defaultValue: 'legal',
+    },
+    { name: 'incomeMin', type: 'number', label: 'Доход от (₽)' },
+    { name: 'incomeMax', type: 'number', label: 'Доход до (₽)' },
+    { name: 'incomeNote', type: 'text', label: 'Оплата (текст, если нет вилки)' },
+    { name: 'incomePerHour', type: 'text', label: 'Доход (старое поле, опционально)' },
     { name: 'requiredLevel', type: 'number', label: 'Уровень' },
-    { name: 'legal', type: 'checkbox', label: 'Легальная', defaultValue: true },
-    { name: 'farmTip', type: 'textarea', label: 'Совет фармлинга' },
+    { name: 'needsTransport', type: 'checkbox', label: 'Нужен транспорт', defaultValue: false },
+    {
+      name: 'difficulty',
+      type: 'select',
+      label: 'Сложность',
+      options: [
+        { label: 'Лёгкая', value: 'easy' },
+        { label: 'Средняя', value: 'medium' },
+        { label: 'Сложная', value: 'hard' },
+      ],
+      defaultValue: 'easy',
+    },
+    { name: 'legal', type: 'checkbox', label: 'Легальная (legacy)', defaultValue: true, admin: { hidden: true } },
+    { name: 'farmTip', type: 'textarea', label: 'Совет по фарму' },
   ],
 }
 
@@ -223,40 +262,6 @@ export const Laws: CollectionConfig = {
       ],
       defaultValue: 'all',
     },
-  ],
-}
-
-export const FamilyMembers: CollectionConfig = {
-  slug: 'family-members',
-  labels: {
-    singular: 'Фармлинг',
-    plural: 'Семья / Фармлинги',
-  },
-  admin: {
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'role', 'status', 'updatedAt'],
-  },
-  access: {
-    read: () => true,
-  },
-  fields: [
-    { name: 'name', type: 'text', required: true, label: 'Имя персонажа' },
-    slugField(),
-    { name: 'role', type: 'text', label: 'Роль в семье' },
-    { name: 'summary', type: 'textarea', label: 'Кратко' },
-    { name: 'body', type: 'textarea', label: 'Описание' },
-    {
-      name: 'status',
-      type: 'select',
-      label: 'Статус',
-      options: [
-        { label: 'Активен', value: 'active' },
-        { label: 'Набор открыт', value: 'recruiting' },
-        { label: 'Отдых', value: 'idle' },
-      ],
-      defaultValue: 'active',
-    },
-    { name: 'specialty', type: 'text', label: 'Специализация фарма' },
   ],
 }
 

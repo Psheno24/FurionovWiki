@@ -15,7 +15,7 @@ export default async function GuidesPage() {
       <PageHero
         eyebrow="База знаний"
         title="Гайды"
-        description="От первого входа до ритма смены фармлинга."
+        description="От первого входа до ритма прибыльной смены."
       />
       <section className="section-block" style={{ paddingTop: 0 }}>
         <div className="shell">

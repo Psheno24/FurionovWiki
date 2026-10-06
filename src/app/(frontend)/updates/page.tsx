@@ -19,7 +19,7 @@ export default async function UpdatesPage() {
       <PageHero
         eyebrow="Журнал"
         title="Обновления вики"
-        description="Что добавили, уточнили и починили в базе фармлингов."
+        description="Что добавили, уточнили и починили в вики."
       />
       <section className="section-block" style={{ paddingTop: 0 }}>
         <div className="shell update-list">

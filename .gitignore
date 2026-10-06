@@ -45,6 +45,8 @@ next-env.d.ts
 *.db
 *.db-*
 furionov-wiki.db*
+/data/ro-import
+data-raw-vehicles.html
 
 # Playwright
 node_modules/
@@ -52,3 +54,9 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# backup-safe extras
+.env.*
+*.exe
+*.psd
+target/

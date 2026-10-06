@@ -9,7 +9,6 @@ import { Media } from './collections/Media'
 import { Users } from './collections/Users'
 import {
   Cases,
-  FamilyMembers,
   Guides,
   Items,
   Jobs,
@@ -27,7 +26,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     meta: {
-      titleSuffix: ' — Фурионовы Вики',
+      titleSuffix: ' — Фурионов Вики',
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -43,7 +42,6 @@ export default buildConfig({
     Cases,
     Guides,
     Laws,
-    FamilyMembers,
     Updates,
   ],
   editor: lexicalEditor(),

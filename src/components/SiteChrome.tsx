@@ -7,10 +7,12 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell header-inner">
         <Link href="/" className="brand">
-          <span className="brand-mark" aria-hidden />
+          <span className="brand-mark" aria-hidden>
+            Ф
+          </span>
           <span className="brand-text">
-            <strong>{site.shortName}</strong>
-            <em>{site.tagline}</em>
+            <strong>Фурионов</strong>
+            <span>Wiki</span>
           </span>
         </Link>
 
@@ -23,10 +25,11 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <Link href="/search" className="search-chip">
+          <Link href="/search" className="btn btn-ghost search-chip">
             Поиск
+            <kbd>Ctrl K</kbd>
           </Link>
-          <Link href="/admin" className="ghost-link">
+          <Link href="/admin" className="btn btn-primary btn-sm">
             Админка
           </Link>
         </div>
@@ -42,7 +45,7 @@ export function SiteFooter() {
         <div>
           <p className="footer-brand">{site.name}</p>
           <p className="footer-copy">
-            Вики семьи Фурионовых по игре «Россия Онлайн» (GTA 5 RP / Majestic). Фокус — фарм, смены и
+            Неофициальная вики по игре «Россия Онлайн» (GTA 5 RP / Majestic). Фокус — фарм, смены и
             практичные гайды.
           </p>
         </div>
@@ -59,8 +62,8 @@ export function SiteFooter() {
         <div>
           <p className="footer-heading">Важно</p>
           <p className="footer-copy">
-            Неофициальный фан-проект семьи. Не аффилирован с Take-Two Interactive, Rockstar Games,
-            Majestic и правообладателями.
+            Неофициальный фан-проект. Не аффилирован с Take-Two Interactive, Rockstar Games, Majestic
+            и правообладателями.
           </p>
         </div>
       </div>

@@ -1,46 +1,46 @@
-# Фурионовы Вики
+# Фурионов Вики
 
-Неофициальная вики семьи **Фурионовых** по игре «Россия Онлайн» (GTA 5 RP / Majestic).  
-Фокус — фарм, смены и практичные гайды. Участников семьи зовём **фармлингами**.
+Неофициальная вики по игре **Россия Онлайн** (GTA 5 RP / Majestic).  
+Фокус — фарм, смены и практичные гайды.
 
 Стек: Next.js + Payload CMS 3 + SQLite + Tailwind.
 
-## Быстрый старт
+## Быстрый старт (локально)
 
 ```bash
 pnpm install
 cp .env.example .env
+# для локалки поставьте NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 pnpm dev
 ```
 
-- Сайт: [http://localhost:3000](http://localhost:3000)
-- Админка: [http://localhost:3000/admin](http://localhost:3000/admin) — создайте первого пользователя при первом входе
+- Сайт: http://localhost:3000
+- Админка: http://localhost:3000/admin — создайте первого пользователя при первом входе
 
-При первом запуске Payload сам засеет stub-контент (транспорт, работы, гайды, семья и т.д.).
+При первом запуске Payload засеет stub-контент.
 
-Повторный сид вручную:
+## Деплой на VPS (`wiki.mysitehub.ru` / `79.137.197.220`)
+
+1. DNS: `A`-запись `wiki.mysitehub.ru` → `79.137.197.220`
+2. На сервере:
 
 ```bash
-pnpm seed
+git clone https://github.com/Psheno24/FurionovWiki.git
+cd FurionovWiki
+cp .env.example .env
+# задайте длинный PAYLOAD_SECRET
+docker compose up -d --build
 ```
 
-## Редактирование контента
+3. Nginx: скопируйте [`deploy/nginx.wiki.mysitehub.ru.conf`](deploy/nginx.wiki.mysitehub.ru.conf) в sites-available и включите сайт.
+4. SSL (по желанию): `certbot --nginx -d wiki.mysitehub.ru`
 
-В `/admin` доступны коллекции:
+Контент и медиа живут в Docker volumes `wiki-data` / `wiki-media`.
 
-- Транспорт, Работы, Предметы, Места, Кейсы
-- Гайды, Законы и правила
-- Семья / Фармлинги
-- Обновления, Media, Users
+## Редактирование
 
-## Переменные окружения
-
-См. `.env.example`:
-
-- `DATABASE_URL` — SQLite (`file:./furionov-wiki.db`)
-- `PAYLOAD_SECRET` — длинный секрет
-- `NEXT_PUBLIC_SERVER_URL` — URL сайта
+В `/admin`: транспорт, работы, предметы, места, кейсы, гайды, законы, обновления, media, users.
 
 ## Дисклеймер
 
-Неофициальный фан-проект семьи. Не аффилирован с Take-Two Interactive, Rockstar Games, Majestic и правообладателями.
+Неофициальный фан-проект. Не аффилирован с Take-Two Interactive, Rockstar Games, Majestic и правообладателями.
